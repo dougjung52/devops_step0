@@ -1,0 +1,29 @@
+name: Build & Deploy
+
+on:
+  push:
+    braches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: JDK17 Install
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Set SSH key copy
+        run: 
+          mkdir -p ~/.ssh
+          echo "${{secrets.SERVER_SSH_KEY}}" > ~/.ssh/id_rsa
+          chmod 600
+          
